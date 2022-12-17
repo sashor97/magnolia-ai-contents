@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module SYSTEM "module.dtd" >
+<module>
+  <name>ai-contents</name>
+  <displayName>${project.name}</displayName>
+  <description>${project.description}</description>
+  <class>org.formentor.magnolia.ai.AIContentsModule</class>
+  <versionHandler>org.formentor.magnolia.ai.setup.AIContentsModuleVersionHandler</versionHandler>
+  <version>${project.version}</version>
+
+  <!-- For more information on module descriptor configuration options -->
+  <!-- https://documentation.magnolia-cms.com/display/DOCS/XML-based+module+descriptor -->
+
+  <components>
+    <id>main</id>
+    <component>
+      <type>org.formentor.magnolia.ai.openai.OpenAITokenProvider</type>
+      <implementation>org.formentor.magnolia.ai.openai.OpenAITokenProvider</implementation>
+      <scope>singleton</scope>
+    </component>
+    <component>
+      <type>org.formentor.magnolia.ai.openai.OpenAIClient</type>
+      <implementation>org.formentor.magnolia.ai.openai.OpenAIClient</implementation>
+    </component>
+  </components>
+  <dependencies>
+    <dependency>
+      <name>core</name>
+      <version>*</version>
+    </dependency>
+    <!--  Add other dependencies here, e.g the mte (magnolia templating essentials).
+    <dependency>
+      <name>mte</name>
+      <version>0.7/*</version>
+    </dependency>
+    -->
+  </dependencies>
+
+</module>

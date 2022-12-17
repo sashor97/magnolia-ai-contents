@@ -1,0 +1,33 @@
+!content-type:blog
+name: blog-app
+icon: icon-content-app
+subApps:
+  detail:
+    label: Blog
+    form:
+      properties:
+        authors:
+          label: Authors
+        summary:
+          $type: richTextField
+          label: Summary
+          height: 200
+        imageAI:
+          $type: compositeField
+          label: Image AI
+          itemProvider:
+            $type: jcrChildNodeProvider
+            nodeName: jcr:content
+            nodeType: mgnl:resource
+          properties:
+            image:
+              label: ""
+              $type: imageAI
+              promptProperty: summary
+        text:
+          $type: richTextField
+          rows: 5
+          maxLength: 5000
+        publish_date:
+          $type: dateField
+          label: Publish date

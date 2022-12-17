@@ -1,0 +1,17 @@
+datasource:
+  workspace: blogs
+  rootPath: /
+  namespaces:
+    lib: https://www.magnolia-travel.com/jcr/1.0/lib
+  autoCreate: true
+
+model:
+  nodeType: lib:blog
+  properties:
+    - name: authors
+    - name: title
+    - name: summary
+    - name: imageAI
+    - name: text
+    - name: publish_date
+      type: Date
