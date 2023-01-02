@@ -9,9 +9,9 @@ subApps:
         authors:
           label: Authors
         summary:
-          $type: richTextField
+          $type: textField
           label: Summary
-          height: 200
+          rows: 3
         imageAI:
           $type: compositeField
           label: Image AI
@@ -25,9 +25,10 @@ subApps:
               $type: imageAI
               promptProperty: summary
         text:
-          $type: richTextField
-          rows: 5
-          maxLength: 5000
+          $type: textFieldAI
+          rows: 12
+          words: 180
+          performance: high
         publish_date:
           $type: dateField
           label: Publish date

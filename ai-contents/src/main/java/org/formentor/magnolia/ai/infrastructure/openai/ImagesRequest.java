@@ -1,13 +1,15 @@
-package org.formentor.magnolia.ai.openai;
+package org.formentor.magnolia.ai.infrastructure.openai;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Builder
 @Getter
 @Setter
-public class ImagesGenerationRequest {
+public class ImagesRequest implements Serializable {
 
     public enum Size {
         Size256 ("256x256"),

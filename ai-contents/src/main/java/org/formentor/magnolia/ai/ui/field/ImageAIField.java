@@ -28,8 +28,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
-import org.formentor.magnolia.ai.openai.ImagesGenerationRequest;
-import org.formentor.magnolia.ai.openai.OpenAIClient;
+import org.formentor.magnolia.ai.domain.ImageAiService;
+import org.formentor.magnolia.ai.domain.ImageFormat;
+import org.formentor.magnolia.ai.domain.ImageSize;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 
@@ -55,7 +56,7 @@ public class ImageAIField extends CustomField<File> {
     private final String promptProperty;
     private final SimpleTranslator translator;
     private final MessagesManager messagesManager;
-    private final OpenAIClient openAIClient;
+    private final ImageAiService imageAIService;
 
     private File currentTempFile;
     private CssLayout imageContainer;
@@ -66,12 +67,12 @@ public class ImageAIField extends CustomField<File> {
     private final ValueContext<JcrNodeWrapper> valueContext;
 
     @Inject
-    public ImageAIField(TempFilesManager tempFilesManager, ImageAIFieldDefinition definition, SimpleTranslator translator, MessagesManager messagesManager, OpenAIClient openAIClient, ValueContext<JcrNodeWrapper> valueContext) {
+    public ImageAIField(TempFilesManager tempFilesManager, ImageAIFieldDefinition definition, SimpleTranslator translator, MessagesManager messagesManager, ImageAiService imageAIService, ValueContext<JcrNodeWrapper> valueContext) {
         this.tempFilesManager = tempFilesManager;
         this.promptProperty = definition.getPromptProperty();
         this.translator = translator;
         this.messagesManager = messagesManager;
-        this.openAIClient = openAIClient;
+        this.imageAIService = imageAIService;
         this.valueContext = valueContext;
     }
 
@@ -160,15 +161,15 @@ public class ImageAIField extends CustomField<File> {
 
     private CompletableFuture<Optional<File>> createImageAI(String rawPrompt) {
         String prompt = Jsoup.clean(rawPrompt, Safelist.none());
-        return openAIClient.generateImageFormatUrl(prompt, 1, ImagesGenerationRequest.Size.Size512)
-                .thenApply(imagesGenerationResponse -> {
-                    if (imagesGenerationResponse.getData().isEmpty()) {
-                        log.warn("Response from Open AI is empty");
+        return imageAIService.generateImage(prompt, 1, ImageSize.Size512, ImageFormat.url)
+                .thenApply(imageUrl -> {
+                    if (imageUrl == null || imageUrl.isEmpty()) {
+                        log.warn("Image not created");
                         return Optional.empty();
                     }
                     try {
                         File localFile = tempFilesManager.createTempFile(prompt.hashCode() + ".png");
-                        final URL url = new URL(imagesGenerationResponse.getData().get(0).getUrl());
+                        final URL url = new URL(imageUrl);
                         try (ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
                              FileOutputStream fileOutputStream = new FileOutputStream(localFile);
                              FileChannel fileChannel = fileOutputStream.getChannel()) {

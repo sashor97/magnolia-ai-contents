@@ -14,13 +14,21 @@
   <components>
     <id>main</id>
     <component>
-      <type>org.formentor.magnolia.ai.openai.OpenAITokenProvider</type>
-      <implementation>org.formentor.magnolia.ai.openai.OpenAITokenProvider</implementation>
+      <type>org.formentor.magnolia.ai.domain.ImageAiService</type>
+      <implementation>org.formentor.magnolia.ai.infrastructure.openai.OpenAiImageService</implementation>
+    </component>
+    <component>
+      <type>org.formentor.magnolia.ai.domain.TextAiService</type>
+      <implementation>org.formentor.magnolia.ai.infrastructure.openai.OpenAiTextAiService</implementation>
+    </component>
+    <component>
+      <type>org.formentor.magnolia.ai.infrastructure.openai.TokenProvider</type>
+      <implementation>org.formentor.magnolia.ai.infrastructure.openai.TokenProvider</implementation>
       <scope>singleton</scope>
     </component>
     <component>
-      <type>org.formentor.magnolia.ai.openai.OpenAIClient</type>
-      <implementation>org.formentor.magnolia.ai.openai.OpenAIClient</implementation>
+      <type>org.formentor.magnolia.ai.infrastructure.openai.OpenAiApiClientProvider</type>
+      <implementation>org.formentor.magnolia.ai.infrastructure.openai.OpenAiApiClientProvider</implementation>
     </component>
   </components>
   <dependencies>
