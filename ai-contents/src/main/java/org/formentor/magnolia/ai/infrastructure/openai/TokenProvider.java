@@ -18,7 +18,7 @@ public class TokenProvider implements Supplier<String> {
 
     @Inject
     public TokenProvider(MagnoliaConfigurationProperties configurationProperties) {
-        token = configurationProperties.getProperty("OPENAI_TOKEN");
+        token = "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";
     }
 
     @Override
