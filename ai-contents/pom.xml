@@ -11,7 +11,7 @@
   -->
   <properties>
     <magnoliaBundleVersion>6.2.26</magnoliaBundleVersion>
-    <javaVersion>11</javaVersion>
+    <javaVersion>1.8</javaVersion>
   </properties>
 
   <dependencyManagement>
