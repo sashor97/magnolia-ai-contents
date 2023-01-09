@@ -17,6 +17,8 @@ public class AIContentsModule implements info.magnolia.module.ModuleLifecycle{
     /* you can optionally implement info.magnolia.module.ModuleLifecycle */
     private String host;
 
+    private String workspaceName;
+
     @Override
     public void start(ModuleLifecycleContext moduleLifecycleContext) {
 

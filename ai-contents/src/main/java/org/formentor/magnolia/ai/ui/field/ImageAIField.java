@@ -14,6 +14,7 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
+import info.magnolia.context.MgnlContext;
 import info.magnolia.i18nsystem.SimpleTranslator;
 import info.magnolia.icons.MagnoliaIcons;
 import info.magnolia.ui.ValueContext;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
+import org.formentor.magnolia.ai.AIContentsModule;
 import org.formentor.magnolia.ai.domain.ImageAiService;
 import org.formentor.magnolia.ai.domain.ImageFormat;
 import org.formentor.magnolia.ai.domain.ImageSize;
@@ -35,7 +37,9 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 
 import javax.inject.Inject;
+import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,6 +56,8 @@ public class ImageAIField extends CustomField<File> {
     private static final Resource DEFAULT_REVIEW_IMG = MagnoliaIcons.FILE;
     private static final Tika TIKA = new Tika();
 
+    private static final String OPENAI_GENERATED_URL="openAI_generated_url";
+
     private final TempFilesManager tempFilesManager;
     private final String promptProperty;
     private final SimpleTranslator translator;
@@ -59,20 +65,24 @@ public class ImageAIField extends CustomField<File> {
     private final ImageAiService imageAIService;
 
     private File currentTempFile;
+    private String openAiUrlGenerated;
     private CssLayout imageContainer;
     private Button removeUploadBtn;
     private Button downloadBtn;
     private Image thumbnail;
 
+    private final AIContentsModule aiContentsModule;
+
     private final ValueContext<JcrNodeWrapper> valueContext;
 
     @Inject
-    public ImageAIField(TempFilesManager tempFilesManager, ImageAIFieldDefinition definition, SimpleTranslator translator, MessagesManager messagesManager, ImageAiService imageAIService, ValueContext<JcrNodeWrapper> valueContext) {
+    public ImageAIField(TempFilesManager tempFilesManager, ImageAIFieldDefinition definition, SimpleTranslator translator, MessagesManager messagesManager, ImageAiService imageAIService, AIContentsModule aiContentsModule, ValueContext<JcrNodeWrapper> valueContext) {
         this.tempFilesManager = tempFilesManager;
         this.promptProperty = definition.getPromptProperty();
         this.translator = translator;
         this.messagesManager = messagesManager;
         this.imageAIService = imageAIService;
+        this.aiContentsModule = aiContentsModule;
         this.valueContext = valueContext;
     }
 
@@ -170,6 +180,8 @@ public class ImageAIField extends CustomField<File> {
                     try {
                         File localFile = tempFilesManager.createTempFile(prompt.hashCode() + ".png");
                         final URL url = new URL(imageUrl);
+                        openAiUrlGenerated=url.toString();
+
                         try (ReadableByteChannel readableByteChannel = Channels.newChannel(url.openStream());
                              FileOutputStream fileOutputStream = new FileOutputStream(localFile);
                              FileChannel fileChannel = fileOutputStream.getChannel()) {
@@ -203,6 +215,28 @@ public class ImageAIField extends CustomField<File> {
 
         updatePreviewThumbnail();
         thumbnail.setVisible(hasValue);
+        storeNewPropertyForImageInJCR();
+
+    }
+
+    private void storeNewPropertyForImageInJCR() {
+        if(openAiUrlGenerated!=null) {
+            try {
+                String uuidOfNode = valueContext.getSingleOrThrow().getUUID();
+                if (uuidOfNode != null) {
+                    String workspaceName=aiContentsModule.getWorkspaceName();
+                    final Session jcrSession = MgnlContext.getJCRSession(workspaceName);
+                    final Node node = jcrSession.getNodeByIdentifier(uuidOfNode);
+                    if (node != null) {
+                        node.setProperty(OPENAI_GENERATED_URL, openAiUrlGenerated);
+                        jcrSession.save();
+                    }
+
+                }
+            } catch (RepositoryException e) {
+                log.error("error during saving url of AI image url into JCR " + e);
+            }
+        }
     }
 
     private Button createControlPanelButton(Resource icon) {
