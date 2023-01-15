@@ -22,6 +22,10 @@
       <implementation>org.formentor.magnolia.ai.infrastructure.openai.OpenAiTextAiService</implementation>
     </component>
     <component>
+      <type>org.formentor.magnolia.ai.domain.TextEditAiService</type>
+      <implementation>org.formentor.magnolia.ai.infrastructure.openai.OpenAiEditTextService</implementation>
+    </component>
+    <component>
       <type>org.formentor.magnolia.ai.infrastructure.openai.TokenProvider</type>
       <implementation>org.formentor.magnolia.ai.infrastructure.openai.TokenProvider</implementation>
       <scope>singleton</scope>
