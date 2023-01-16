@@ -118,18 +118,18 @@ Definition of field _editTextFieldAI_
 editText:
    $type: editTextFieldAI
    rows: 12
-   performance: high
+   performance: best
 ```
 ### Field properties
 #### performance
-Indicates the performance of the prediction model. At this moment only high is allowed value because openai doesn't support other models at this moment for https://beta.openai.com/docs/api-reference/edits/create :
-- **high**
-> The integration with [Open AI](https://openai.com/) maps performance with models of [Open AI](https://openai.com/), - e.g. performance **high** uses the model _"text-davinci-edit-001"_
+Indicates the performance of the prediction model. At this moment only best is allowed value because openai doesn't support other models at this moment for https://beta.openai.com/docs/api-reference/edits/create :
+- **best**
+> The integration with [Open AI](https://openai.com/) maps performance with models of [Open AI](https://openai.com/), - e.g. performance **best** uses the model _"text-davinci-edit-001"_
 ### Example
 ```yaml
 editText:
   label: Additional info about blog
   $type: editTextFieldAI
   rows: 12
-  performance: high
+  performance: best
 ```

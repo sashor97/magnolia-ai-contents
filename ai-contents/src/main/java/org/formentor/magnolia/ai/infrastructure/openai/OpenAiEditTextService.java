@@ -14,10 +14,10 @@ public class OpenAiEditTextService implements TextEditAiService {
     private final String DEFAULT_MODEL = "text-davinci-edit-001";
     private final String DEFAULT_INSTRUCTION = "Fix the spelling mistakes";
 
-    //TODO: at this moment only text-davinci-edit-001 model is available as high, in future try to integrate others types of performances
+    //TODO: at this moment only text-davinci-edit-001 model is available as best, in future try to integrate others types of performances
     private static final Map<TextPerformance, String> MODEL_MAPPING; static {
         MODEL_MAPPING = new HashMap<>();
-        MODEL_MAPPING.put(TextPerformance.high, "text-davinci-edit-001");
+        MODEL_MAPPING.put(TextPerformance.best, "text-davinci-edit-001");
     }
     private final OpenAiApi api;
 

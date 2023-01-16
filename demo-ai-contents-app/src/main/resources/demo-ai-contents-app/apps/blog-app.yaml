@@ -33,7 +33,7 @@ subApps:
           label: Additional info about blog
           $type: editTextFieldAI
           rows: 12
-          performance: high
+          performance: best
         publish_date:
           $type: dateField
           label: Publish date
