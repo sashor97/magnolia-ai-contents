@@ -29,6 +29,11 @@ subApps:
           rows: 12
           words: 180
           performance: high
+        editText:
+          label: Additional info about blog
+          $type: editTextFieldAI
+          rows: 12
+          performance: high
         publish_date:
           $type: dateField
           label: Publish date

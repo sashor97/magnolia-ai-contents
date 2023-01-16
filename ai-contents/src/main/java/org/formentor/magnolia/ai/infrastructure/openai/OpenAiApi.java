@@ -18,4 +18,10 @@ public interface OpenAiApi {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     CompletionResult createCompletion(CompletionRequest request);
+
+    @POST
+    @Path("/v1/edits")
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    EditResult createEdit(EditRequest request);
 }
