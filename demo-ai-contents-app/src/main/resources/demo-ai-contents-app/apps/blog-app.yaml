@@ -29,11 +29,14 @@ subApps:
           rows: 12
           words: 180
           performance: high
+          strategy: completion
         editText:
           label: Additional info about blog
-          $type: editTextFieldAI
+          $type: textFieldAI
           rows: 12
+          words: 180
           performance: best
+          strategy: edit
         publish_date:
           $type: dateField
           label: Publish date

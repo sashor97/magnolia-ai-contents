@@ -18,6 +18,7 @@ import java.util.Optional;
 public class TextAIFieldDefinition extends TextFieldDefinition {
     Integer words;
     String performance;
+    String strategy;
     public TextAIFieldDefinition() {
         setFactoryClass(TextAIFieldFactory.class);
     }
